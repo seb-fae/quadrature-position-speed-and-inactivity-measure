@@ -26,6 +26,8 @@
 
 #define SPEED_MEASURE
 
+//#define POSITION_CAPTURE
+
 #define CHANNEL_A_PIN 0
 #define CHANNEL_A_PORT gpioPortB
 #define CHANNEL_B_PIN 1
@@ -208,7 +210,11 @@ void timer_pos_init(void)
   TIMER_IntClear(TIMER_POSITION, 0xFFFFFFFF);
   NVIC_ClearPendingIRQ(TIMER_POSITION_IRQN);
 
+#ifdef POSITION_CAPTURE
   TIMER_IntEnable(TIMER_POSITION, (TIMER_IEN_CC0 | TIMER_IEN_DIRCHG));
+#else
+  TIMER_IntEnable(TIMER_POSITION, (TIMER_IEN_DIRCHG));
+#endif
   NVIC_EnableIRQ(TIMER_POSITION_IRQN);
 
   // Enable the TIMER
